@@ -5,6 +5,8 @@
 
 #include "chip.h"
 
+#define TRUE 1 // holy shit
+
 // Crashes program and prints error to stderr upon incorrect invocation
 static void Usage();
 
@@ -15,9 +17,15 @@ int main(int argc, char const *argv[])
         Usage(argv[0]);
     }
 
-    Chip *chip = Chip_Initialize();
-    Chip_LoadROM(chip, argv[1]);
-    Chip_Free(chip);
+    Chip *chip = Initialize_Chip();
+    LoadROM(chip, argv[1]);
+    _PrintMemory(chip);
+    Free_Chip(chip);
+
+    // Fetch, decode, execute
+    while (TRUE)
+    {
+    }
 
     return EXIT_SUCCESS;
 }

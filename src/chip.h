@@ -18,11 +18,20 @@ typedef struct
     uint8_t *screen;
 } Chip;
 
+typedef uint16_t opcode;
+
 // Allocates and returns a pointer to a new Chip-8.
 // In particular, initializes its values to a Chip-8
 // that has not ran any ROM code.
-Chip *Chip_Initialize();
+Chip *Initialize_Chip();
 
-void Chip_Free(Chip *chip);
+// Frees the given Chip-8.
+void Free_Chip(Chip *chip);
 
-void Chip_LoadROM(Chip *chip, const char *filename);
+// Loads a ROM with the given filename into the Chip-8.
+// Crashes if the ROM is too large, or if there is an
+// error opening the ROM.
+void LoadROM(Chip *chip, const char *filename);
+
+// Prints the contents of the Chip-8's memory to stdout.
+void _PrintMemory(Chip *chip);

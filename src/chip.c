@@ -8,20 +8,20 @@
 
 static FILE *CheckValidROM(const char *filename, int *file_size);
 
-Chip *Chip_Initialize()
+Chip *Initialize_Chip()
 {
     Chip *chip = (Chip *)(calloc(1, sizeof(Chip)));
     chip->memory = calloc(MEMORY_SIZE, sizeof(uint8_t));
     return chip;
 }
 
-void Chip_Free(Chip *chip)
+void Free_Chip(Chip *chip)
 {
     free(chip->memory);
     free(chip);
 }
 
-void Chip_LoadROM(Chip *chip, const char *filename)
+void LoadROM(Chip *chip, const char *filename)
 {
     int file_size;
     FILE *rom = CheckValidROM(filename, &file_size);
@@ -58,4 +58,14 @@ FILE *CheckValidROM(const char *filename, int *file_size)
     fseek(file, 0L, SEEK_SET);
     *file_size = rom_size;
     return file;
+}
+
+void _PrintMemory(Chip *chip)
+{
+    for (uint8_t *curr = chip->memory + MEMORY_START;
+         curr < chip->memory + MEMORY_SIZE;
+         curr++)
+    {
+        printf("%02x ", *curr);
+    }
 }
