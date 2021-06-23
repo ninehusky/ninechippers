@@ -1,17 +1,47 @@
-#ifndef _CHIP_H
 #include "chip.h"
-#endif
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 
+#define FONT_SET_LENGTH 80
+#define FONT_SET_START 0x50
+
+// Checks that a file at the given filename exists,
+// and is a suitable size for the CHIP-8 machine.
+// Returns file pointer if the file exists, as well as
+// setting the output parameter. Otherwise crashes.
 static FILE *CheckValidROM(const char *filename, int *file_size);
+
+// Loads the font set into the Chip-8.
+static void LoadFontSet(Chip *chip);
+
+static const uint8_t FONT_SET[FONT_SET_LENGTH] =
+    {
+        0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+        0x20, 0x60, 0x20, 0x20, 0x70, // 1
+        0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+        0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+        0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+        0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+        0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+        0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+        0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+        0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+        0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+        0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+        0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+        0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+        0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+        0xF0, 0x80, 0xF0, 0x80, 0x80  // F
+};
 
 Chip *Initialize_Chip()
 {
     Chip *chip = (Chip *)(calloc(1, sizeof(Chip)));
+    chip->program_counter = MEMORY_START;
     chip->memory = calloc(MEMORY_SIZE, sizeof(uint8_t));
+    LoadFontSet(chip);
     return chip;
 }
 
@@ -32,10 +62,6 @@ void LoadROM(Chip *chip, const char *filename)
     fclose(rom);
 }
 
-// Checks that a file at the given filename exists,
-// and is a suitable size for the CHIP-8 machine.
-// Returns file pointer if the file exists, as well as
-// setting the output parameter. Otherwise crashes.
 FILE *CheckValidROM(const char *filename, int *file_size)
 {
     FILE *file = fopen(filename, "rb");
@@ -67,5 +93,13 @@ void _PrintMemory(Chip *chip)
          curr++)
     {
         printf("%02x ", *curr);
+    }
+}
+
+static void LoadFontSet(Chip *chip)
+{
+    for (int i = 0; i < FONT_SET_LENGTH; i++)
+    {
+        chip->memory[i + FONT_SET_START] = FONT_SET[i];
     }
 }

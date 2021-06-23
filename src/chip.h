@@ -1,4 +1,5 @@
-// TODO: update the makefile lol
+#ifndef _CHIP_H
+#define _CHIP_H
 
 #include <stdint.h>
 
@@ -18,8 +19,6 @@ typedef struct
     uint8_t *screen;
 } Chip;
 
-typedef uint16_t opcode;
-
 // Allocates and returns a pointer to a new Chip-8.
 // In particular, initializes its values to a Chip-8
 // that has not ran any ROM code.
@@ -35,3 +34,5 @@ void LoadROM(Chip *chip, const char *filename);
 
 // Prints the contents of the Chip-8's memory to stdout.
 void _PrintMemory(Chip *chip);
+
+#endif

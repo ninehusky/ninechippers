@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "chip.h"
+#include "opcodes.h"
 
 #define TRUE 1 // holy shit
 
@@ -19,12 +20,13 @@ int main(int argc, char const *argv[])
 
     Chip *chip = Initialize_Chip();
     LoadROM(chip, argv[1]);
-    _PrintMemory(chip);
+    // _PrintMemory(chip);
     Free_Chip(chip);
 
     // Fetch, decode, execute
-    while (TRUE)
+    for (int i = MEMORY_START; i < MEMORY_SIZE; i++)
     {
+        ExecuteOpcode(chip);
     }
 
     return EXIT_SUCCESS;
