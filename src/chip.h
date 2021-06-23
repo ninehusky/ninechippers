@@ -3,8 +3,8 @@
 #include <stdint.h>
 
 #define NUM_REGISTERS 16
-
 #define MEMORY_SIZE 4096
+#define MEMORY_START 0x200
 
 typedef struct
 {
@@ -25,4 +25,4 @@ Chip *Chip_Initialize();
 
 void Chip_Free(Chip *chip);
 
-void Chip_LoadROM(const char* filename);
+void Chip_LoadROM(Chip *chip, const char *filename);
