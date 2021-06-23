@@ -17,6 +17,7 @@ int main(int argc, char const *argv[])
 
     Chip *chip = Chip_Initialize();
     Chip_LoadROM(chip, argv[1]);
+    Chip_Free(chip);
 
     return EXIT_SUCCESS;
 }
