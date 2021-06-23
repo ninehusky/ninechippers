@@ -13,109 +13,107 @@ void ExecuteOpcode(Chip *chip);
 
 /******************************** OPCODES ***********************/
 // Clear the display.
-void cls(Chip *chip);
+void ClearDisplay(Chip *chip);
 
 // Return from a subroutine.
-void ret(Chip *chip);
+void ReturnFromSubroutine(Chip *chip);
 
 // Jump to the address embedded within the opcode.
-void jp_addr(Chip *chip);
+void JumpToOpcodeAddress(Chip *chip);
 
 // Call subroutine embedded within the opcode.
-void call_addr(Chip *chip);
+void CallOpcodeSubroutine(Chip *chip);
 
 // Skip next instruction if Vx = kk.
-void skip_equal(Chip *chip);
+void SkipIfByteEqualToRegister(Chip *chip);
 
 // Skip next instruction if Vx != kk.
-void skip_unequal(Chip *chip);
+void SkipIfByteNotEqualToRegister(Chip *chip);
 
 // Skip next instruction if Vx = Vy.
-void skip_equal_registers(Chip *chip);
+void SkipIfRegistersEqual(Chip *chip);
 
 // Set Vx = kk.
-void set_register_to_byte(Chip *chip);
+void SetRegisterToByte(Chip *chip);
 
 // Set Vx = Vx + kk.
-void add_byte(Chip *chip);
+void AddByteToRegister(Chip *chip);
 
 // Set Vx = Vy. 
-void set_register_to_register(Chip *chip);
+void SetRegisterToRegister(Chip *chip);
 
 // Performs an OR operation, i.e., Vx |= Vy.
-void or_registers(Chip *chip);
+void OrRegisters(Chip *chip);
 
 // Performs an AND operation, i.e., Vx &= Vy.
-void and_registers(Chip *chip);
+void AndRegisters(Chip *chip);
 
 // Performs an XOR operation, i.e., Vx ^= Vy.
-void and_registers(Chip *chip);
+void XorRegisters(Chip *chip);
 
 // Set Vx = Vx + Vy, set VF = carry.
-void add_registers(Chip *chip);
+void AddRegisters(Chip *chip);
 
 // Set Vx = Vx - Vy, set VF = NOT borrow.
-void sub_registers(Chip *chip);
+void SubtractRegisters(Chip *chip);
 
 // Set Vx = Vx >> 1.
-void shift_right(Chip *chip);
+void ShiftRegisterRight(Chip *chip);
 
 // Set Vx = Vy - Vx, set VF = NOT borrow
-void subn_registers(Chip *chip);
+void SubtractRegistersReverse(Chip *chip);
 
 // Set Vx = Vx << 1
-void shift_left(Chip *chip);
+void ShiftRegisterLeft(Chip *chip);
 
 // Skip next instruction if Vx != Vy.
-void skip_unequal_registers(Chip *chip);
+void SkipIfUnequalRegisters(Chip *chip);
 
 // Set I = nnn
-void set_address_register(Chip *chip);
+void SetAddressRegister(Chip *chip);
 
 // Jump to nnn + V0
-void jump_with_register(Chip *chip);
+void JumpToOpcodeRegisterSum(Chip *chip);
 
 // Vx = random byte & kk
-void randomize_register(Chip *chip);
+void RandomizeRegister(Chip *chip);
 
 // Display n-byte sprite starting at something I won't worry about
 // TODO: worry about it
-void display_sprite(Chip *chip);
+void DisplaySprite(Chip *chip);
 
 // Skip next instruction if key with value of Vx is pressed.
-void skip_if_pressed(Chip *chip);
+void SkipIfKeyPressed(Chip *chip);
 
 // Skip next instruction if key with value of Vx is not pressed.
-void skip_if_not_pressed(Chip *chip);
+void SkipIfKeyNotPressed(Chip *chip);
 
 // Set Vx = delay timer value.
-void set_register_to_delay_timer(Chip *chip);
+void SetRegisterToDelayTimer(Chip *chip);
 
 // Wait for key press, store value of key in Vx
-void store_key_in_register(Chip *chip);
+void SetRegisterUponKeyPress(Chip *chip);
 
 // Set delay timer to Vx
-void set_delay_timer_to_register(Chip *chip);
+void SetDelayTimerToRegister(Chip *chip);
 
 // Set sound timer to Vx
-void set_sound_timer_to_register(Chip *chip);
+void SetSoundTimerToRegister(Chip *chip);
 
 // I += Vx
-void add_to_address_register(Chip *chip);
+void AddToAddressRegister(Chip *chip);
 
 // I = location of sprite for digit Vx
-void set_address_register_to_sprite(Chip *chip);
+void SetAddressRegisterToSprite(Chip *chip);
 
 // store bcd representation of Vx in memory locations at
 // I, I + 1, and I + 2.
-void store_bcd_representation(Chip *chip);
+void StoreBCDRepresentation(Chip *chip);
 
 // Store registers V0 through Vx in memory starting at I
-void store_registers(Chip *chip);
+void StoreRegisters(Chip *chip);
 
 // Read into registers V0 through Vx in memory starting at I
-void read_registers(Chip *chip);
-
-
+void ReadRegisters(Chip *chip);
 
 #endif
