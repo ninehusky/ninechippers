@@ -130,6 +130,43 @@ void SetRegisterToRegister(Chip *chip, opcode op)
     chip->registers[_get_x(op)] = chip->registers[_get_y(op)];
 }
 
+// 8xy1 - OR Vx, Vy
+// Vx |= Vy
+void OrRegisters(Chip *chip, opcode op)
+{
+    chip->registers[_get_x(op)] |= chip->registers[_get_y(op)];
+}
+
+// 8xy2 - AND Vx, Vy
+// Vx &= Vy
+void AndRegisters(Chip *chip, opcode op)
+{
+    chip->registers[_get_x(op)] &= chip->registers[_get_y(op)];
+}
+
+// 8xy3 - XOR Vx, Vy
+// Vx ^= Vy
+void XorRegisters(Chip *chip, opcode op)
+{
+    chip->registers[_get_x(op)] ^= chip->registers[_get_y(op)];
+}
+
+// 8xy4 - ADD Vx, Vy
+// Vx = Vx + Vy, VF = carry
+void AddRegisters(Chip *chip, opcode op)
+{
+    uint16_t sum = chip->registers[_get_x(op)] +
+                   chip->registers[_get_y(op)];
+    chip->registers[_get_x(op)] = sum;         // lossy conversion?
+    chip->registers[0xF] = ((sum >> 4) & 0x1); // this should really be 1.
+}
+
+// 8xy5 - SUB Vx, Vy
+// Vx = Vx - Vy, VF = NOT borrow
+void SubtractRegisters(Chip *chip, opcode op)
+{
+}
+
 // HELPER FUNCTION MAYHEM:
 
 static opcode _GetOpcode(Chip *chip)
