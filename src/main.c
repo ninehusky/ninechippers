@@ -21,13 +21,14 @@ int main(int argc, char const *argv[])
     Chip *chip = Initialize_Chip();
     LoadROM(chip, argv[1]);
     // _PrintMemory(chip);
-    Free_Chip(chip);
 
     // Fetch, decode, execute
     for (int i = MEMORY_START; i < MEMORY_SIZE; i++)
     {
         ExecuteOpcode(chip);
     }
+
+    Free_Chip(chip);
 
     return EXIT_SUCCESS;
 }

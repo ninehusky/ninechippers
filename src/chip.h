@@ -8,6 +8,10 @@
 #define STACK_SIZE 16
 #define MEMORY_START 0x200
 
+#define FONT_SET_LENGTH 80
+#define FONT_SET_START 0x50
+#define FONT_SPRITE_SIZE 0x5
+
 typedef struct
 {
     uint8_t registers[NUM_REGISTERS];

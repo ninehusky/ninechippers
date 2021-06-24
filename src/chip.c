@@ -6,6 +6,7 @@
 
 #define FONT_SET_LENGTH 80
 #define FONT_SET_START 0x50
+#define FONT_SPRITE_SIZE 0x5
 
 // Checks that a file at the given filename exists,
 // and is a suitable size for the CHIP-8 machine.
