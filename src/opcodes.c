@@ -241,6 +241,33 @@ void RandomizeRegister(Chip *chip, opcode op)
 // opposite side of the screen.
 void DisplaySprite(Chip *chip, opcode op)
 {
+    uint8_t height = _get_nibble(op);
+    uint8_t x_coord = chip->registers[_get_x(op)];
+    uint8_t y_coord = chip->registers[_get_y(op)];
+
+    chip->registers[0xF] = 0;
+
+    for (int i = 0; i < height; i++)
+    {
+        uint8_t row = chip->memory[chip->address_register + i];
+        // iterate across row
+        for (int j = 0; j < 8; j++) // TODO: maybe add macro for '8'
+        {
+            uint8_t previous_pixel = (chip->screen[y_coord][x_coord] >> (8 - 1 - j));
+            uint8_t new_pixel = ((row >> (8 - 1 - j)) & 0x1);
+
+            if (new_pixel != previous_pixel)
+            {
+                // we're erasing something
+                if (new_pixel == 0x0)
+                {
+                    chip->registers[0xF] = 0x1;
+                }
+                chip->needs_drawing = true; // TODO: remember to set this back later lmao
+            }
+            chip->screen[y_coord + i][x_coord + j] = new_pixel;
+        }
+    }
 }
 
 // Ex9E - SKP Vx

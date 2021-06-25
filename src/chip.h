@@ -2,6 +2,7 @@
 #define _CHIP_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define NUM_REGISTERS 16
 #define MEMORY_SIZE 4096
@@ -11,6 +12,9 @@
 #define FONT_SET_LENGTH 80
 #define FONT_SET_START 0x50
 #define FONT_SPRITE_SIZE 0x5
+
+#define DISPLAY_WIDTH_IN_PIXELS 32
+#define DISPLAY_HEIGHT_IN_PIXELS 64
 
 typedef struct
 {
@@ -22,7 +26,8 @@ typedef struct
     uint16_t stack[STACK_SIZE];
     uint8_t stack_pointer;
     uint8_t *memory;
-    uint8_t *screen;
+    uint8_t screen[DISPLAY_WIDTH_IN_PIXELS][DISPLAY_HEIGHT_IN_PIXELS];
+    bool needs_drawing;
 } Chip;
 
 // Allocates and returns a pointer to a new Chip-8.

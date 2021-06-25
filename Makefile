@@ -6,9 +6,9 @@ EXE := $(BIN_DIR)/ninechipper
 SRC := $(wildcard $(SRC_DIR)/*.c)
 OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-CPPFLAGS := -Iinclude -MMD -MP
+CPPFLAGS := -I include -MMD -MP
 CFLAGS   := -Wall
-LDFLAGS  := -Llib
+LDFLAGS  := -L lib -l SDL2-2.0.0
 LDLIBS   := -lm
 
 .PHONY: all clean
