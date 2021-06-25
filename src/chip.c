@@ -33,7 +33,7 @@ static const uint8_t FONT_SET[FONT_SET_LENGTH] =
         0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
-Chip *Initialize_Chip()
+Chip *InitializeChip()
 {
     Chip *chip = (Chip *)(calloc(1, sizeof(Chip)));
     chip->program_counter = MEMORY_START;
@@ -43,7 +43,7 @@ Chip *Initialize_Chip()
     return chip;
 }
 
-void Free_Chip(Chip *chip)
+void FreeChip(Chip *chip)
 {
     free(chip->memory);
     free(chip);

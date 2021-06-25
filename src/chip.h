@@ -13,8 +13,8 @@
 #define FONT_SET_START 0x50
 #define FONT_SPRITE_SIZE 0x5
 
-#define DISPLAY_WIDTH_IN_PIXELS 32
-#define DISPLAY_HEIGHT_IN_PIXELS 64
+#define DISPLAY_WIDTH_IN_PIXELS 64
+#define DISPLAY_HEIGHT_IN_PIXELS 32
 
 typedef struct
 {
@@ -33,10 +33,10 @@ typedef struct
 // Allocates and returns a pointer to a new Chip-8.
 // In particular, initializes its values to a Chip-8
 // that has not ran any ROM code.
-Chip *Initialize_Chip();
+Chip *InitializeChip();
 
 // Frees the given Chip-8.
-void Free_Chip(Chip *chip);
+void FreeChip(Chip *chip);
 
 // Loads a ROM with the given filename into the Chip-8.
 // Crashes if the ROM is too large, or if there is an

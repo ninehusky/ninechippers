@@ -8,9 +8,10 @@
 
 #include "chip.h"
 #include "opcodes.h"
+#include "display.h"
 
-#define WIDTH
-#define HEIGHT
+#define WIDTH 640
+#define HEIGHT 320
 
 // Crashes program and prints error to stderr upon incorrect invocation
 static void Usage();
@@ -22,44 +23,37 @@ int main(int argc, char const *argv[])
         Usage(argv[0]);
     }
 
-    if (SDL_Init(SDL_INIT_VIDEO) != 0)
-    {
-        fprintf(stderr, "SDL couldn't initialize.\n");
-    }
+    Chip *chip = InitializeChip();
+    LoadROM(chip, argv[1]);
 
-    SDL_Window *window = SDL_CreateWindow("ninechipper", SDL_WINDOWPOS_CENTERED,
-                                          SDL_WINDOWPOS_CENTERED,
-                                          100, 100, SDL_WINDOW_OPENGL);
+    Display *display = InitializeDisplay();
+    if (!display)
+    {
+        return EXIT_FAILURE;
+    }
 
     bool running = true;
     while (running)
     {
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
+        // Process events given by SDL
+        if (!ProcessEvents(chip))
         {
-            switch (event.type)
-            {
-            case SDL_QUIT:
-                running = false;
-                break;
-            }
+            break;
         }
+        // Fetch, decode, execute
+        for (int i = MEMORY_START; i < MEMORY_SIZE; i++)
+        {
+            ExecuteOpcode(chip);
+        }
+
+        // Render to screen
+        // TODO: if chip->draw_flag
+        RenderDisplay(display, chip);
     }
 
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
-    // Chip *chip = Initialize_Chip();
-    // LoadROM(chip, argv[1]);
-    // // _PrintMemory(chip);
-
-    // // Fetch, decode, execute
-    // for (int i = MEMORY_START; i < MEMORY_SIZE; i++)
-    // {
-    //     ExecuteOpcode(chip);
-    // }
-
-    // Free_Chip(chip);
+    // Clean up resources
+    CleanUpDisplay(display);
+    FreeChip(chip);
 
     return EXIT_SUCCESS;
 }
