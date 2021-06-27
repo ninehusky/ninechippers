@@ -45,6 +45,7 @@ Display *InitializeDisplay()
     }
     display->texture = texture;
 
+    SDL_RenderClear(renderer);
     return display;
 }
 
@@ -64,9 +65,28 @@ bool ProcessEvents(Chip *chip)
 
 void RenderDisplay(Display *display, Chip *chip)
 {
-    SDL_UpdateTexture(display->texture, NULL, chip->screen,
-                      DISPLAY_WIDTH_IN_PIXELS * sizeof(uint8_t));
-    SDL_RenderCopy(display->renderer, display->texture, NULL, NULL);
+    SDL_RenderClear(display->renderer);
+    SDL_Rect rect;
+    for (int i = 0; i < DISPLAY_HEIGHT_IN_PIXELS; i++)
+    {
+        for (int j = 0; j < DISPLAY_WIDTH_IN_PIXELS; j++)
+        {
+            uint8_t current_pixel = chip->screen[i][j];
+            rect.x = i * DISPLAY_SCALE;
+            rect.y = j * DISPLAY_SCALE;
+            rect.w = DISPLAY_SCALE;
+            rect.h = DISPLAY_SCALE;
+            if (current_pixel == 0x1)
+            {
+                SDL_SetRenderDrawColor(display->renderer, 0xff, 0xff, 0xff, SDL_ALPHA_OPAQUE);
+            }
+            else
+            {
+                SDL_SetRenderDrawColor(display->renderer, 0x0, 0x0, 0x0, SDL_ALPHA_OPAQUE);
+            }
+            SDL_RenderDrawRect(display->renderer, &rect);
+        }
+    }
     SDL_RenderPresent(display->renderer);
 }
 

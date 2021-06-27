@@ -94,6 +94,20 @@ void _PrintMemory(Chip *chip)
     }
 }
 
+void _PrintDisplay(Chip *chip)
+{
+    printf("DISPLAY:\n");
+    for (int i = 0; i < DISPLAY_HEIGHT_IN_PIXELS; i++)
+    {
+        for (int j = 0; j < DISPLAY_WIDTH_IN_PIXELS; j++)
+        {
+            printf("%d ", chip->screen[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
 static void LoadFontSet(Chip *chip)
 {
     for (int i = 0; i < FONT_SET_LENGTH; i++)

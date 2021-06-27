@@ -26,7 +26,7 @@ typedef struct
     uint16_t stack[STACK_SIZE];
     uint8_t stack_pointer;
     uint8_t *memory;
-    uint8_t screen[DISPLAY_WIDTH_IN_PIXELS][DISPLAY_HEIGHT_IN_PIXELS];
+    uint8_t screen[DISPLAY_HEIGHT_IN_PIXELS][DISPLAY_WIDTH_IN_PIXELS];
     bool needs_drawing;
 } Chip;
 
@@ -45,5 +45,8 @@ void LoadROM(Chip *chip, const char *filename);
 
 // Prints the contents of the Chip-8's memory to stdout.
 void _PrintMemory(Chip *chip);
+
+// Prints the contents of the Chip-8's screen buffer to stdout.
+void _PrintDisplay(Chip *chip);
 
 #endif

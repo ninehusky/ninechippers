@@ -41,14 +41,16 @@ int main(int argc, char const *argv[])
             break;
         }
         // Fetch, decode, execute
-        for (int i = MEMORY_START; i < MEMORY_SIZE; i++)
-        {
-            ExecuteOpcode(chip);
-        }
+        ExecuteOpcode(chip);
+        SDL_Delay(500);
 
         // Render to screen
-        // TODO: if chip->draw_flag
-        RenderDisplay(display, chip);
+        if (chip->needs_drawing)
+        {
+            _PrintDisplay(chip);
+            RenderDisplay(display, chip);
+            chip->needs_drawing = false;
+        }
     }
 
     // Clean up resources

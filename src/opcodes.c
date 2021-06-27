@@ -31,16 +31,50 @@ void ExecuteOpcode(Chip *chip)
 {
     opcode op = _get_opcode(chip);
     printf("Opcode: %04x\n", op);
-    switch (op)
+    switch (op & 0xF000)
     {
-
+    case 0x0000:
+        switch (op)
+        {
+        case 0x00E0:
+            ClearDisplay(chip, op);
+            break;
+        }
+        break;
+    case 0x1000:
+        JumpToOpcodeAddress(chip, op);
+        break;
+    case 0x6000:
+        SetRegisterToByte(chip, op);
+        break;
+    case 0x7000:
+        AddByteToRegister(chip, op);
+        break;
+    case 0xA000:
+        SetAddressRegister(chip, op);
+        break;
+    case 0xD000:
+        DisplaySprite(chip, op);
+        break;
     default:
         printf("Error: opcode %04x not implemented\n", op);
+        chip->program_counter -= 2;
     }
     chip->program_counter += 2;
 }
 
 // 00E0 - CLS
+void ClearDisplay(Chip *chip, opcode op)
+{
+    for (int i = 0; i < DISPLAY_HEIGHT_IN_PIXELS; i++)
+    {
+        for (int j = 0; j < DISPLAY_WIDTH_IN_PIXELS; j++)
+        {
+            chip->screen[i][j] = 0;
+        }
+    }
+    chip->needs_drawing = true;
+}
 
 // 00EE - RET
 // The interpreter sets the program counter to the address at
@@ -57,6 +91,8 @@ void ReturnFromSubroutine(Chip *chip, opcode op)
 void JumpToOpcodeAddress(Chip *chip, opcode op)
 {
     chip->program_counter = _get_nnn(op);
+    // do not increment PC afterwards
+    chip->program_counter -= 2;
 }
 
 // 2nnn - CALL addr
@@ -242,8 +278,8 @@ void RandomizeRegister(Chip *chip, opcode op)
 void DisplaySprite(Chip *chip, opcode op)
 {
     uint8_t height = _get_nibble(op);
-    uint8_t x_coord = chip->registers[_get_x(op)];
-    uint8_t y_coord = chip->registers[_get_y(op)];
+    uint8_t x_coord = chip->registers[_get_x(op)] % DISPLAY_WIDTH_IN_PIXELS;
+    uint8_t y_coord = chip->registers[_get_y(op)] % DISPLAY_HEIGHT_IN_PIXELS;
 
     chip->registers[0xF] = 0;
 
@@ -253,19 +289,16 @@ void DisplaySprite(Chip *chip, opcode op)
         // iterate across row
         for (int j = 0; j < 8; j++) // TODO: maybe add macro for '8'
         {
-            uint8_t previous_pixel = (chip->screen[y_coord][x_coord] >> (8 - 1 - j));
-            uint8_t new_pixel = ((row >> (8 - 1 - j)) & 0x1);
-
-            if (new_pixel != previous_pixel)
+            uint8_t bit = (row & (0x80 >> j));
+            if (bit)
             {
-                // we're erasing something
-                if (new_pixel == 0x0)
+                if (chip->screen[x_coord + j][y_coord + i])
                 {
                     chip->registers[0xF] = 0x1;
                 }
-                chip->needs_drawing = true; // TODO: remember to set this back later lmao
             }
-            chip->screen[y_coord + i][x_coord + j] = new_pixel;
+            chip->screen[x_coord + j][y_coord + i] ^= 0x1;
+            chip->needs_drawing = true;
         }
     }
 }
