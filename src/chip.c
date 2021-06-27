@@ -4,10 +4,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#define FONT_SET_LENGTH 80
-#define FONT_SET_START 0x50
-#define FONT_SPRITE_SIZE 0x5
-
 // Checks that a file at the given filename exists,
 // and is a suitable size for the CHIP-8 machine.
 // Returns file pointer if the file exists, as well as
@@ -37,16 +33,17 @@ static const uint8_t FONT_SET[FONT_SET_LENGTH] =
         0xF0, 0x80, 0xF0, 0x80, 0x80  // F
 };
 
-Chip *Initialize_Chip()
+Chip *InitializeChip()
 {
     Chip *chip = (Chip *)(calloc(1, sizeof(Chip)));
     chip->program_counter = MEMORY_START;
+    // TODO: assume registers and stack are part of struct?
     chip->memory = calloc(MEMORY_SIZE, sizeof(uint8_t));
     LoadFontSet(chip);
     return chip;
 }
 
-void Free_Chip(Chip *chip)
+void FreeChip(Chip *chip)
 {
     free(chip->memory);
     free(chip);
@@ -95,6 +92,20 @@ void _PrintMemory(Chip *chip)
     {
         printf("%02x ", *curr);
     }
+}
+
+void _PrintDisplay(Chip *chip)
+{
+    printf("DISPLAY:\n");
+    for (int i = 0; i < DISPLAY_HEIGHT_IN_PIXELS; i++)
+    {
+        for (int j = 0; j < DISPLAY_WIDTH_IN_PIXELS; j++)
+        {
+            printf("%d ", chip->screen[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
 
 static void LoadFontSet(Chip *chip)

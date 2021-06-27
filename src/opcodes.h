@@ -77,8 +77,7 @@ void JumpToOpcodeRegisterSum(Chip *chip, opcode op);
 // Vx = random byte & kk
 void RandomizeRegister(Chip *chip, opcode op);
 
-// Display n-byte sprite starting at something I won't worry about
-// TODO: worry about it
+// Display n-byte sprite pointed at by Chip's address register
 void DisplaySprite(Chip *chip, opcode op);
 
 // Skip next instruction if key with value of Vx is pressed.

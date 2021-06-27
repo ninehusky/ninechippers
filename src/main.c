@@ -2,11 +2,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+
+#include <SDL2/SDL.h>
 
 #include "chip.h"
 #include "opcodes.h"
+#include "display.h"
 
-#define TRUE 1 // holy shit
+#define WIDTH 640
+#define HEIGHT 320
 
 // Crashes program and prints error to stderr upon incorrect invocation
 static void Usage();
@@ -18,17 +23,39 @@ int main(int argc, char const *argv[])
         Usage(argv[0]);
     }
 
-    Chip *chip = Initialize_Chip();
+    Chip *chip = InitializeChip();
     LoadROM(chip, argv[1]);
-    // _PrintMemory(chip);
 
-    // Fetch, decode, execute
-    for (int i = MEMORY_START; i < MEMORY_SIZE; i++)
+    Display *display = InitializeDisplay();
+    if (!display)
     {
-        ExecuteOpcode(chip);
+        return EXIT_FAILURE;
     }
 
-    Free_Chip(chip);
+    bool running = true;
+    while (running)
+    {
+        // Process events given by SDL
+        if (!ProcessEvents(chip))
+        {
+            break;
+        }
+        // Fetch, decode, execute
+        ExecuteOpcode(chip);
+        SDL_Delay(500);
+
+        // Render to screen
+        if (chip->needs_drawing)
+        {
+            _PrintDisplay(chip);
+            RenderDisplay(display, chip);
+            chip->needs_drawing = false;
+        }
+    }
+
+    // Clean up resources
+    CleanUpDisplay(display);
+    FreeChip(chip);
 
     return EXIT_SUCCESS;
 }
